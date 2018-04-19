@@ -28,20 +28,12 @@ if (!isset($version))
     exit(1);
 }
 
+$format       = preg_replace('/[^a-z0-9-.]/i', '', $_GET['format']);
+$format       = empty($format) ? '.zip' : '.' . ltrim($format, '.');
 $urlVersion   = str_replace('.', '-', $version);
-$filename     = "Joomla_$version-Stable-Full_Package.zip";
+$filename     = "Joomla_$version-Stable-Full_Package" . $format;
 $fullFilePath = "https://downloads.joomla.org/cms/joomla3/$urlVersion/$filename";
 
-ob_end_clean();
-header("Cache-Control: public, must-revalidate");
-header('Cache-Control: pre-check=0, post-check=0, max-age=0');
-header("Pragma: no-cache");
-header("Content-Description: File Transfer");
-header("Expires: Wed, 17 Aug 2005 00:00:00 GMT");
-header("Content-Type: application/octetstream");
-header('Content-Disposition: attachment; filename=' . $filename);
-header("Content-Transfer-Encoding: binary\n");
-
-readfile($fullFilePath);
+header('Location: ' . $fullFilePath, 302);
 
 exit;
